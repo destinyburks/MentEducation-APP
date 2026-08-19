@@ -26,6 +26,6 @@ window.MEBooking={
   async cancel(id,reason){await this.requireSession();const {error}=await this.client.rpc('cancel_mentorship_booking',{p_booking_id:id,p_reason:reason||'Cancelled by participant'});if(error)throw error},
   async complete(id){await this.requireSession();const {error}=await this.client.rpc('complete_mentorship_booking',{p_booking_id:id});if(error)throw error},
   async isAdmin(){await this.requireSession();const {data,error}=await this.client.rpc('is_platform_admin');if(error)throw error;return !!data},
-  async adminCredit(userId,bookingId,amountCents,reason){await this.requireSession();const {error}=await this.client.rpc('admin_adjust_mentee_credit',{p_user_id:userId,p_adjustment_type:'increase',p_amount_cents:amountCents,p_reason:reason,p_related_booking_id:bookingId});if(error)throw error},
-  async adminRefund(bookingId,decision,percent,reason){await this.requireSession();const {error}=await this.client.rpc('admin_override_refund',{p_booking_id:bookingId,p_decision:decision,p_refund_percent:percent,p_reason:reason});if(error)throw error}
+  async adminCredit(userId,bookingId,amountCents,reason){await this.requireSession();const {error}=await this.client.rpc('admin_adjust_mentee_credit',{p_user_id:userId,p_adjustment_type:'add_credit',p_amount_cents:amountCents,p_reason:reason,p_related_booking_id:bookingId});if(error)throw error},
+  async adminRefund(bookingId,percent,reason){await this.requireSession();const pct=Number(percent);const decision=pct>=100?'full_refund':pct>0?'partial_refund':'denied';const {error}=await this.client.rpc('admin_override_refund',{p_booking_id:bookingId,p_decision:decision,p_refund_percent:pct,p_reason:reason});if(error)throw error}
 };
