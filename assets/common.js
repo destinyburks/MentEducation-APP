@@ -17,4 +17,13 @@ async function mountNotificationBell(target){
  try{const {data:{session}}=await sb.auth.getSession();if(!session)return;const {data,error}=await sb.rpc('get_my_notifications',{p_limit:1});if(error)return;const n=Number(data?.unread_count||0),badge=a.querySelector('.meBellBadge');badge.textContent=n>99?'99+':n;badge.classList.toggle('zero',n===0);a.title=n?`${n} unread notification${n===1?'':'s'}`:'No unread notifications'}catch(e){}
 }
 window.mountNotificationBell=mountNotificationBell;
-document.addEventListener('click',e=>{const target=e.target.closest('[onclick*="openView(\'messages\')"]');if(!target)return;e.preventDefault();e.stopImmediatePropagation();location.href='/messages.html'},true);
+document.addEventListener('click',e=>{
+ const messageTarget=e.target.closest('[onclick*="openView(\'messages\')"]');
+ if(messageTarget){e.preventDefault();e.stopImmediatePropagation();location.href='/messages.html';return}
+ const sessionTarget=e.target.closest('[onclick*="openView(\'sessions\')"]');
+ if(!sessionTarget)return;
+ const roleBtn=document.querySelector('.rolepicker button.active');
+ const currentRole=roleBtn?.dataset?.role||new URLSearchParams(location.search).get('role')||'mentee';
+ if(currentRole==='owner')return;
+ e.preventDefault();e.stopImmediatePropagation();location.href='/sessions.html?role='+encodeURIComponent(currentRole);
+},true);
