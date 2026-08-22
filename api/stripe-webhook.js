@@ -1,5 +1,6 @@
 const crypto=require('crypto');
 const SUPABASE_URL='https://zulbqeqmpvivsdwqmyhn.supabase.co';
+// Stripe webhook credentials are supplied only through Vercel environment variables.
 function readRaw(req){return new Promise((resolve,reject)=>{const chunks=[];req.on('data',c=>chunks.push(Buffer.from(c)));req.on('end',()=>resolve(Buffer.concat(chunks)));req.on('error',reject)})}
 function validSig(raw,header,secret){if(!header||!secret)return false;const parts=Object.fromEntries(header.split(',').map(x=>x.split('=')));const t=parts.t,v1=parts.v1;if(!t||!v1)return false;if(Math.abs(Date.now()/1000-Number(t))>300)return false;const expected=crypto.createHmac('sha256',secret).update(t+'.'+raw.toString('utf8')).digest('hex');try{return crypto.timingSafeEqual(Buffer.from(expected),Buffer.from(v1))}catch{return false}}
 async function stripeRefund(paymentIntent,reason){const form=new URLSearchParams();form.set('payment_intent',paymentIntent);if(reason)form.set('metadata[reason]',reason);return fetch('https://api.stripe.com/v1/refunds',{method:'POST',headers:{'Authorization':'Bearer '+process.env.STRIPE_SECRET_KEY,'Content-Type':'application/x-www-form-urlencoded'},body:form})}
