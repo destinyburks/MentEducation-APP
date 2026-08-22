@@ -32,28 +32,34 @@
     return text;
   }
   function apply(el){
-    if(!shouldAssist(el))return;
+    if(!shouldAssist(el)||el.dataset.writingAssistBound==='true')return;
     el.spellcheck=true;
     el.setAttribute('autocapitalize','sentences');
     el.setAttribute('autocorrect','on');
     el.dataset.writingAssist='on';
+    el.dataset.writingAssistBound='true';
     const clean=()=>{
       const before=el.value;
       const after=polish(before);
       if(after!==before){
         el.value=after;
         el.dispatchEvent(new Event('input',{bubbles:true}));
-        el.dispatchEvent(new Event('change',{bubbles:true}));
       }
     };
     el.addEventListener('blur',clean);
     el.addEventListener('change',clean);
   }
-  function scan(root=document){root.querySelectorAll('textarea,input').forEach(apply)}
-  document.addEventListener('DOMContentLoaded',()=>{
+  function scan(root=document){
+    if(root.matches?.('textarea,input'))apply(root);
+    root.querySelectorAll?.('textarea,input').forEach(apply);
+  }
+  function init(){
     scan();
-    new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1){if(n.matches?.('textarea,input'))apply(n);scan(n)}}))).observe(document.body,{childList:true,subtree:true});
-  });
+    if(!document.body)return;
+    new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1)scan(n)}))).observe(document.body,{childList:true,subtree:true});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
   document.addEventListener('submit',e=>e.target.querySelectorAll?.('textarea,input').forEach(el=>{if(shouldAssist(el)){const v=polish(el.value);if(v!==el.value)el.value=v}}),true);
   window.MEWritingAssist={polish,scan};
 })();
