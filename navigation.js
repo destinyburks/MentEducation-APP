@@ -11,6 +11,7 @@ window.MENTEDUCATION_ROUTES = Object.freeze({
   privacy: '/privacy.html',
   wallet: '/wallet/',
   earnings: '/earnings/',
+  settings: '/settings.html',
   ownerPayments: '/owner/payments/'
 });
 
