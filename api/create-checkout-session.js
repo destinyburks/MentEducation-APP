@@ -26,9 +26,25 @@ module.exports=async function handler(req,res){
     form.set('line_items[0][quantity]','1');
     const stripeRes=await fetch('https://api.stripe.com/v1/checkout/sessions',{method:'POST',headers:{'Authorization':'Bearer '+process.env.STRIPE_SECRET_KEY,'Content-Type':'application/x-www-form-urlencoded'},body:form});
     const stripe=await stripeRes.json();
-    if(!stripeRes.ok) return res.status(502).json({error:stripe.error&&stripe.error.message||'Stripe Checkout could not be created'});
+    if(!stripeRes.ok){
+      console.error('Stripe checkout session creation failed',{
+        status:stripeRes.status,
+        type:stripe.error&&stripe.error.type,
+        code:stripe.error&&stripe.error.code,
+        param:stripe.error&&stripe.error.param,
+        message:stripe.error&&stripe.error.message
+      });
+      return res.status(502).json({
+        error:stripe.error&&stripe.error.message||'Stripe Checkout could not be created',
+        stripe_code:stripe.error&&stripe.error.code||null,
+        stripe_param:stripe.error&&stripe.error.param||null
+      });
+    }
     const attachRes=await fetch(SUPABASE_URL+'/rest/v1/rpc/attach_stripe_checkout_session',{method:'POST',headers:{'apikey':process.env.SUPABASE_SERVICE_ROLE_KEY,'Authorization':'Bearer '+process.env.SUPABASE_SERVICE_ROLE_KEY,'Content-Type':'application/json'},body:JSON.stringify({p_booking_id:bookingId,p_checkout_session_id:stripe.id})});
     if(!attachRes.ok) return res.status(409).json({error:'The appointment hold expired before checkout opened.'});
     return res.status(200).json({url:stripe.url,session_id:stripe.id});
-  }catch(e){return res.status(500).json({error:e.message||'Unable to create checkout'});}
+  }catch(e){
+    console.error('Checkout endpoint failure',e);
+    return res.status(500).json({error:e.message||'Unable to create checkout'});
+  }
 };
