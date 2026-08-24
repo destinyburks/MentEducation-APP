@@ -57,6 +57,7 @@
     scan();
     if(!document.body)return;
     new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1)scan(n)}))).observe(document.body,{childList:true,subtree:true});
+    if(!document.querySelector('script[data-me-mobile-menu]')){const s=document.createElement('script');s.src='/mobile-menu.js';s.dataset.meMobileMenu='1';document.head.appendChild(s)}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
   else init();
