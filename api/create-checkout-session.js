@@ -1,4 +1,15 @@
 const SUPABASE_URL='https://zulbqeqmpvivsdwqmyhn.supabase.co';
+const serviceHeaders=()=>({'apikey':process.env.SUPABASE_SERVICE_ROLE_KEY,'Authorization':'Bearer '+process.env.SUPABASE_SERVICE_ROLE_KEY,'Content-Type':'application/json'});
+async function getExistingCheckout(bookingId){
+  const r=await fetch(SUPABASE_URL+'/rest/v1/payments?booking_id=eq.'+encodeURIComponent(bookingId)+'&select=provider_checkout_session_id,status&order=created_at.desc&limit=1',{headers:serviceHeaders()});
+  if(!r.ok)return null;
+  const rows=await r.json();
+  const id=rows&&rows[0]&&rows[0].provider_checkout_session_id;
+  if(!id)return null;
+  const sr=await fetch('https://api.stripe.com/v1/checkout/sessions/'+encodeURIComponent(id),{headers:{'Authorization':'Bearer '+process.env.STRIPE_SECRET_KEY}});
+  if(!sr.ok)return null;
+  return sr.json();
+}
 module.exports=async function handler(req,res){
   if(req.method!=='POST') return res.status(405).json({error:'Method not allowed'});
   try{
@@ -13,10 +24,22 @@ module.exports=async function handler(req,res){
     if(summary.status!=='pending'||!summary.hold_expires_at||new Date(summary.hold_expires_at)<=new Date()) return res.status(409).json({error:'This appointment hold has expired.'});
     if(Number(summary.cash_due_cents)<=0) return res.status(400).json({error:'No cash payment is required for this booking.'});
     const origin='https://'+req.headers.host;
+
+    // A declined card can be retried inside the same Stripe Checkout Session.
+    // If the mentee backs out and taps Pay again during the same MentEducation hold,
+    // reopen the existing unpaid session instead of creating duplicate payment windows.
+    const existing=await getExistingCheckout(bookingId);
+    if(existing&&existing.status==='open'&&existing.payment_status!=='paid'&&existing.url){
+      return res.status(200).json({url:existing.url,session_id:existing.id,reused:true});
+    }
+    if(existing&&existing.status==='complete'&&existing.payment_status==='paid'){
+      return res.status(200).json({url:origin+'/booking-status.html?booking='+encodeURIComponent(bookingId)+'&checkout=success',session_id:existing.id,already_paid:true});
+    }
+
     const form=new URLSearchParams();
     form.set('mode','payment');
     form.set('success_url',origin+'/booking-status.html?booking='+encodeURIComponent(bookingId)+'&checkout=success');
-    form.set('cancel_url',origin+'/checkout.html?booking='+encodeURIComponent(bookingId));
+    form.set('cancel_url',origin+'/checkout.html?booking='+encodeURIComponent(bookingId)+'&payment=cancelled');
     form.set('client_reference_id',bookingId);
     form.set('metadata[booking_id]',bookingId);
     form.set('payment_intent_data[metadata][booking_id]',bookingId);
@@ -27,24 +50,14 @@ module.exports=async function handler(req,res){
     const stripeRes=await fetch('https://api.stripe.com/v1/checkout/sessions',{method:'POST',headers:{'Authorization':'Bearer '+process.env.STRIPE_SECRET_KEY,'Content-Type':'application/x-www-form-urlencoded'},body:form});
     const stripe=await stripeRes.json();
     if(!stripeRes.ok){
-      console.error('Stripe checkout session creation failed',{
-        status:stripeRes.status,
-        type:stripe.error&&stripe.error.type,
-        code:stripe.error&&stripe.error.code,
-        param:stripe.error&&stripe.error.param,
-        message:stripe.error&&stripe.error.message
-      });
-      return res.status(502).json({
-        error:stripe.error&&stripe.error.message||'Stripe Checkout could not be created',
-        stripe_code:stripe.error&&stripe.error.code||null,
-        stripe_param:stripe.error&&stripe.error.param||null
-      });
+      console.error('Stripe checkout session creation failed',{status:stripeRes.status,type:stripe.error&&stripe.error.type,code:stripe.error&&stripe.error.code,param:stripe.error&&stripe.error.param,message:stripe.error&&stripe.error.message});
+      return res.status(502).json({error:'We could not open secure payment right now. Please try again.',stripe_code:stripe.error&&stripe.error.code||null});
     }
-    const attachRes=await fetch(SUPABASE_URL+'/rest/v1/rpc/attach_stripe_checkout_session',{method:'POST',headers:{'apikey':process.env.SUPABASE_SERVICE_ROLE_KEY,'Authorization':'Bearer '+process.env.SUPABASE_SERVICE_ROLE_KEY,'Content-Type':'application/json'},body:JSON.stringify({p_booking_id:bookingId,p_checkout_session_id:stripe.id})});
+    const attachRes=await fetch(SUPABASE_URL+'/rest/v1/rpc/attach_stripe_checkout_session',{method:'POST',headers:serviceHeaders(),body:JSON.stringify({p_booking_id:bookingId,p_checkout_session_id:stripe.id})});
     if(!attachRes.ok) return res.status(409).json({error:'The appointment hold expired before checkout opened.'});
-    return res.status(200).json({url:stripe.url,session_id:stripe.id});
+    return res.status(200).json({url:stripe.url,session_id:stripe.id,reused:false});
   }catch(e){
     console.error('Checkout endpoint failure',e);
-    return res.status(500).json({error:e.message||'Unable to create checkout'});
+    return res.status(500).json({error:'We could not open secure payment right now. Please try again.'});
   }
 };
