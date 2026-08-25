@@ -1,15 +1,11 @@
 const SUPABASE_URL='https://zulbqeqmpvivsdwqmyhn.supabase.co';
 
-async function stripeGet(path){
-  const r=await fetch('https://api.stripe.com'+path,{headers:{Authorization:'Bearer '+process.env.STRIPE_SECRET_KEY}});
-  const data=await r.json();
-  if(!r.ok) throw new Error((data.error&&data.error.message)||'Stripe request failed');
-  return data;
-}
-async function stripePost(path,params){
+async function stripePost(path,params,idempotencyKey){
   const body=new URLSearchParams();
   Object.entries(params||{}).forEach(([k,v])=>{if(v!==undefined&&v!==null&&v!=='')body.set(k,String(v));});
-  const r=await fetch('https://api.stripe.com'+path,{method:'POST',headers:{Authorization:'Bearer '+process.env.STRIPE_SECRET_KEY,'Content-Type':'application/x-www-form-urlencoded'},body});
+  const headers={Authorization:'Bearer '+process.env.STRIPE_SECRET_KEY,'Content-Type':'application/x-www-form-urlencoded'};
+  if(idempotencyKey)headers['Idempotency-Key']=idempotencyKey;
+  const r=await fetch('https://api.stripe.com'+path,{method:'POST',headers,body});
   const data=await r.json();
   if(!r.ok) throw new Error((data.error&&data.error.message)||'Stripe request failed');
   return data;
@@ -28,7 +24,7 @@ module.exports=async function handler(req,res){
     if(!release.ok) throw new Error('Unable to release due payout holds');
     stats.released=Number(await release.json())||0;
 
-    const dueRes=await fetch(SUPABASE_URL+'/rest/v1/mentor_payouts?status=eq.pending&select=id,mentor_id,payment_id,amount_cents,currency,source_booking_id&order=created_at.asc&limit=50',{headers});
+    const dueRes=await fetch(SUPABASE_URL+'/rest/v1/mentor_payouts?status=eq.pending&select=id,mentor_id,payment_id,amount_cents,currency,source_booking_id,payout_type&order=created_at.asc&limit=50',{headers});
     const due=await dueRes.json();
     if(!dueRes.ok) throw new Error(due.message||'Unable to load due payouts');
 
@@ -46,29 +42,27 @@ module.exports=async function handler(req,res){
           stats.skipped++;continue;
         }
 
-        const payRes=await fetch(`${SUPABASE_URL}/rest/v1/payments?id=eq.${encodeURIComponent(payout.payment_id)}&select=provider_payment_intent_id,provider_transfer_id&limit=1`,{headers});
-        const pays=await payRes.json();
-        const payment=Array.isArray(pays)?pays[0]:null;
-        if(!payment||!payment.provider_payment_intent_id) throw new Error('Payment intent is missing');
-        if(payment.provider_transfer_id){
-          await fetch(`${SUPABASE_URL}/rest/v1/mentor_payouts?id=eq.${encodeURIComponent(payout.id)}`,{method:'PATCH',headers,body:JSON.stringify({status:'paid',provider_payout_id:payment.provider_transfer_id,paid_at:new Date().toISOString(),updated_at:new Date().toISOString()})});
-          stats.processed++;continue;
-        }
-
-        const intent=await stripeGet('/v1/payment_intents/'+encodeURIComponent(payment.provider_payment_intent_id));
-        const chargeId=typeof intent.latest_charge==='string'?intent.latest_charge:(intent.latest_charge&&intent.latest_charge.id)||'';
+        // MentEducation uses separate charges and transfers. A mentor payout may be funded
+        // by cash, account credit, or a mixture of both, and no-show compensation may not
+        // have a payment row at all. Transfer from the platform balance rather than tying
+        // the transfer to one Stripe charge.
         const transfer=await stripePost('/v1/transfers',{
           amount:payout.amount_cents,
           currency:payout.currency||'usd',
           destination:acct.provider_account_id,
-          source_transaction:chargeId,
-          transfer_group:'booking_'+String(payout.source_booking_id||payout.payment_id).replace(/[^a-zA-Z0-9_-]/g,''),
+          transfer_group:'booking_'+String(payout.source_booking_id||payout.id).replace(/[^a-zA-Z0-9_-]/g,''),
           'metadata[menteducation_payout_id]':payout.id,
-          'metadata[booking_id]':payout.source_booking_id||''
-        });
+          'metadata[booking_id]':payout.source_booking_id||'',
+          'metadata[payout_type]':payout.payout_type||'mentor_earnings'
+        },'menteducation_payout_'+payout.id);
+
         const now=new Date().toISOString();
         await fetch(`${SUPABASE_URL}/rest/v1/mentor_payouts?id=eq.${encodeURIComponent(payout.id)}`,{method:'PATCH',headers,body:JSON.stringify({status:'paid',provider_payout_id:transfer.id,paid_at:now,updated_at:now,hold_reason:null})});
-        await fetch(`${SUPABASE_URL}/rest/v1/payments?id=eq.${encodeURIComponent(payout.payment_id)}`,{method:'PATCH',headers,body:JSON.stringify({provider_transfer_id:transfer.id,updated_at:now})});
+
+        // Keep the payment record linked to its Stripe transfer when a payment exists.
+        if(payout.payment_id){
+          await fetch(`${SUPABASE_URL}/rest/v1/payments?id=eq.${encodeURIComponent(payout.payment_id)}`,{method:'PATCH',headers,body:JSON.stringify({provider_transfer_id:transfer.id,updated_at:now})});
+        }
         stats.processed++;
       }catch(err){
         stats.failed++;
