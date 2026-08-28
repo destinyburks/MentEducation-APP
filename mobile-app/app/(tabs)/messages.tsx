@@ -1,0 +1,7 @@
+import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors, radii, spacing } from '../../src/theme';
+
+export default function Messages(){return <SafeAreaView style={s.safe}><View style={s.content}><Text style={s.title}>Messages</Text><Text style={s.sub}>Your mentorship conversations in one place.</Text><View style={s.row}><View style={s.avatar}><Ionicons name="person" size={26} color="#8E7BBE"/></View><View style={{flex:1}}><Text style={s.name}>Jasmine Williams</Text><Text style={s.preview}>Looking forward to our session tomorrow!</Text></View><View style={s.badge}><Text style={s.badgeText}>2</Text></View></View></View></SafeAreaView>}
+const s=StyleSheet.create({safe:{flex:1,backgroundColor:colors.white},content:{padding:spacing.lg},title:{fontSize:28,fontWeight:'800',color:colors.navy},sub:{fontSize:15,color:colors.muted,marginTop:5},row:{marginTop:24,borderWidth:1,borderColor:colors.line,borderRadius:radii.md,padding:14,flexDirection:'row',alignItems:'center',gap:12},avatar:{width:50,height:50,borderRadius:25,backgroundColor:colors.lavenderStrong,alignItems:'center',justifyContent:'center'},name:{fontSize:16,fontWeight:'800',color:colors.ink},preview:{fontSize:13,color:colors.muted,marginTop:5},badge:{width:24,height:24,borderRadius:12,backgroundColor:colors.purple,alignItems:'center',justifyContent:'center'},badgeText:{color:'white',fontSize:12,fontWeight:'800'}})
