@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "MentEducation",
+    "slug": "menteducation",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#F7F7FB"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.menteducation.app"
+    },
+    "android": {
+      "package": "com.menteducation.app"
+    }
+  }
+}
