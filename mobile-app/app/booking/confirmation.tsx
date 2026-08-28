@@ -1,0 +1,18 @@
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors, radii, spacing } from '../../src/theme';
+
+export default function Confirmation(){
+  return <SafeAreaView style={s.safe}><View style={s.content}>
+    <View style={s.check}><Ionicons name="calendar" size={42} color={colors.purple}/><View style={s.tick}><Ionicons name="checkmark" size={18} color="white"/></View></View>
+    <Text style={s.title}>You're All Set!</Text><Text style={s.sub}>Your session is booked successfully.</Text>
+    <View style={s.card}><Text style={s.name}>Jasmine Williams</Text><Text style={s.role}>Career Development</Text><View style={s.line}/><Text style={s.detail}>Tuesday, May 27, 2025</Text><Text style={s.detail}>10:00 AM – 11:00 AM (EST)</Text><Text style={s.detail}>Video Call</Text><Text style={s.price}>$85.00</Text><Text style={s.id}>Session ID: #ME20250527001</Text></View>
+    <Text style={s.heading}>What's Next?</Text>
+    {[['mail-outline','Check your email','We sent your confirmation and session details.'],['calendar-outline','Add to calendar','Never miss your session.'],['chatbubble-ellipses-outline','Prepare for your session','Review your goals and get ready to grow.']].map(([icon,t,d])=><View key={t} style={s.next}><View style={s.icon}><Ionicons name={icon as any} size={22} color={colors.purple}/></View><View style={{flex:1}}><Text style={s.nextTitle}>{t}</Text><Text style={s.nextSub}>{d}</Text></View><Ionicons name="chevron-forward" size={20} color={colors.muted}/></View>)}
+    <TouchableOpacity style={s.primary} onPress={()=>router.replace('/sessions')}><Text style={s.primaryText}>Go to My Sessions</Text></TouchableOpacity><TouchableOpacity onPress={()=>router.replace('/')}><Text style={s.home}>Back to Home</Text></TouchableOpacity>
+  </View></SafeAreaView>
+}
+
+const s=StyleSheet.create({safe:{flex:1,backgroundColor:colors.white},content:{padding:spacing.lg,flex:1},check:{alignSelf:'center',width:94,height:94,borderRadius:28,backgroundColor:colors.lavender,alignItems:'center',justifyContent:'center',marginTop:20},tick:{position:'absolute',right:12,bottom:12,width:28,height:28,borderRadius:14,backgroundColor:colors.purple,alignItems:'center',justifyContent:'center'},title:{fontSize:30,fontWeight:'800',color:colors.navy,textAlign:'center',marginTop:24},sub:{fontSize:15,color:colors.muted,textAlign:'center',marginTop:6},card:{borderWidth:1,borderColor:colors.line,borderRadius:radii.md,padding:18,marginTop:24},name:{fontSize:18,fontWeight:'800',color:colors.ink},role:{fontSize:13,color:colors.muted,marginTop:4},line:{height:1,backgroundColor:colors.line,marginVertical:14},detail:{fontSize:14,color:colors.ink,marginTop:7},price:{fontSize:20,fontWeight:'800',color:colors.ink,marginTop:12},id:{fontSize:11,color:colors.muted,marginTop:5},heading:{fontSize:19,fontWeight:'800',color:colors.navy,marginTop:22,marginBottom:10},next:{flexDirection:'row',alignItems:'center',gap:12,borderWidth:1,borderColor:colors.line,borderRadius:14,padding:13,marginBottom:9},icon:{width:42,height:42,borderRadius:12,backgroundColor:colors.lavender,alignItems:'center',justifyContent:'center'},nextTitle:{fontSize:14,fontWeight:'800',color:colors.ink},nextSub:{fontSize:12,color:colors.muted,marginTop:3},primary:{height:54,borderRadius:14,backgroundColor:colors.purple,alignItems:'center',justifyContent:'center',marginTop:'auto'},primaryText:{color:'white',fontSize:16,fontWeight:'800'},home:{textAlign:'center',color:colors.purple,fontWeight:'800',marginTop:16,marginBottom:10}})
