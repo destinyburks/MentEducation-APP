@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "MentEducation",
+    "slug": "menteducation-mobile",
+    "scheme": "menteducation",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "plugins": ["expo-router"],
+    "ios": {"supportsTablet": false, "bundleIdentifier": "com.menteducation.app"},
+    "android": {"package": "com.menteducation.app"}
+  }
+}
