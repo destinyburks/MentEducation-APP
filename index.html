@@ -3,68 +3,162 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>MentEducation</title>
+<title>MentEducation | Find a Mentor. Build Your Future.</title>
+<meta name="description" content="MentEducation connects mentees with verified mentors for focused, practical guidance across careers, business, education, and personal growth."/>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="topbar"><div class="container inner">
-  <a class="brand" href="#" data-route="home">Ment<span>Education</span></a>
-  <nav class="desktop-nav">
-    <a href="#" data-route="home">Home</a>
-    <a href="#" data-route="directory">Find Mentors</a>
-    <a href="#how">How It Works</a>
-    <a href="#" data-route="apply">Become a Mentor</a>
-    <a href="about.html">About Us</a>
+<header class="topbar">
+  <div class="container inner">
+    <a class="brand" href="#" data-route="home" aria-label="MentEducation home">Ment<span>Education</span></a>
+    <nav class="desktop-nav" aria-label="Primary navigation">
+      <a href="#" data-route="directory">Find Mentors</a>
+      <a href="how-it-works.html">How It Works</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="safety.html">Safety</a>
+      <a href="about.html">About</a>
+      <a href="#" data-route="apply">Become a Mentor</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn ghost" data-route="login">Log In</button>
+      <button class="btn primary" data-route="role">Get Started</button>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu">Menu</button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mobile-menu-head"><a class="brand" href="#" data-route="home">Ment<span>Education</span></a><button class="close" id="closeMenu" aria-label="Close menu">Close</button></div>
+  <nav>
+    <a data-route="directory">Find Mentors</a>
+    <a href="how-it-works.html">How It Works</a>
     <a href="pricing.html">Pricing</a>
+    <a href="safety.html">Safety & Trust</a>
+    <a href="about.html">About Us</a>
+    <a href="help.html">Help Center</a>
+    <a data-route="apply">Become a Mentor</a>
+    <button class="btn primary full" data-route="role">Get Started</button>
+    <button class="btn light full" data-route="login">Log In</button>
   </nav>
-  <div class="nav-actions"><button class="btn ghost" data-route="login">Log In</button><button class="btn primary" data-route="role">Sign Up</button></div>
-  <button class="menu-btn" id="menuBtn">☰</button>
-</div></header>
-<div class="mobile-menu" id="mobileMenu"><button class="close" id="closeMenu">×</button><div class="brand">Ment<span>Education</span></div><nav>
-  <a data-route="home">Home</a><a data-route="directory">Find Mentors</a><a data-route="apply">Become a Mentor</a><a href="#how">How It Works</a>
-  <a href="about.html">About Us</a><a href="pricing.html">Pricing</a><a href="safety.html">Safety & Trust</a><a href="help.html">Help Center</a>
-  <a href="dashboards.html?role=mentee&view=messages">Messages</a><a href="dashboards.html?role=mentee&view=settings">Settings</a>
-  <button class="btn primary full" data-route="role">Sign Up</button><button class="btn light full" data-route="login">Log In</button>
-</nav></div>
+</div>
 
 <main>
 <section class="screen active" id="home">
-  <div class="hero"><div class="container"><div class="hero-grid"><div>
-    <span class="eyebrow">✦ Learn. Grow. Achieve.</span><h1>Real Mentors.<br>Real <span>Impact.</span></h1>
-    <p>MentEducation connects you with verified mentors who provide guidance, support, and real-world knowledge to help you reach your goals.</p>
-    <div class="hero-actions"><button class="btn primary" data-route="directory">Find a Mentor →</button><button class="btn light" data-route="apply">Become a Mentor</button></div>
-    <div class="trust-row"><div class="trust-card"><div class="icon-circle">✓</div><div><b>Verified Mentors</b><small>Carefully vetted for quality</small></div></div><div class="trust-card"><div class="icon-circle">🛡</div><div><b>Safe & Secure</b><small>Your safety comes first</small></div></div><div class="trust-card"><div class="icon-circle">↗</div><div><b>Goal Focused</b><small>Real support, real results</small></div></div></div>
-  </div><div class="hero-art"><div class="hero-photo"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=900&q=85" alt="Mentor"></div><div class="floating"><b>10,000+ mentees connected</b><div class="stars">★★★★★</div><small>4.9 average rating</small></div></div></div></div></div>
-  <div class="how" id="how"><div class="container"><h2>How MentEducation Works</h2><div class="steps"><div class="step"><div class="num">1</div><div><b>Sign Up</b><small>Create your free account.</small></div></div><div class="step"><div class="num">2</div><div><b>Find or Apply</b><small>Find mentors or apply to join.</small></div></div><div class="step"><div class="num">3</div><div><b>Connect</b><small>Book sessions and start learning.</small></div></div><div class="step"><div class="num">4</div><div><b>Grow</b><small>Learn, achieve, and reach your goals.</small></div></div></div></div></div>
-  <div class="section"><div class="container"><div class="section-head"><div><h2>Featured Mentors</h2><p>Experienced professionals ready to help you move forward.</p></div><button class="btn light desktop-only" data-route="directory">View all mentors</button></div><div class="mentor-grid" id="featuredMentors"></div></div></div>
-  <div class="section preview-strip"><div class="container"><div class="section-head"><div><h2>Explore MentEducation</h2><p>The newest platform features are now part of this integrated preview.</p></div></div><div class="quick-grid">
-    <a class="quick-card" href="pricing.html"><b>Pricing</b><span>See mentee access, mentor-set pricing and fees.</span></a>
-    <a class="quick-card" href="safety.html"><b>Safety & Trust</b><span>Review verification, reporting and platform protections.</span></a>
-    <a class="quick-card" href="help.html"><b>Help Center</b><span>Get answers about accounts, bookings and payments.</span></a>
-    <a class="quick-card" href="dashboards.html"><b>Role Dashboards</b><span>Preview mentee, mentor and Owner experiences.</span></a>
-  </div></div></div>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">PERSONAL GUIDANCE. REAL PROGRESS.</div>
+        <h1>Find the mentor who helps you move <span>forward.</span></h1>
+        <p class="hero-lead">Book focused one-on-one sessions with experienced mentors who can help you make clearer decisions, build confidence, and take your next step with purpose.</p>
+        <div class="hero-actions">
+          <button class="btn primary btn-lg" data-route="directory">Find a Mentor</button>
+          <button class="btn light btn-lg" data-route="apply">Become a Mentor</button>
+        </div>
+        <div class="hero-proof">
+          <div><strong>Verified</strong><span>mentor profiles</span></div>
+          <div><strong>Flexible</strong><span>1:1 booking</span></div>
+          <div><strong>Secure</strong><span>payments & messaging</span></div>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="MentEducation mentorship experience">
+        <div class="hero-photo-card"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1100&q=88" alt="Professional mentor in a bright office"></div>
+        <div class="floating-card floating-rating"><span class="mini-label">MENTEE RATING</span><strong>4.9 / 5</strong><span class="stars">★★★★★</span></div>
+        <div class="floating-card floating-session"><span class="status-dot"></span><div><strong>Career Strategy</strong><small>Tomorrow · 10:00 AM</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="logo-strip">
+    <div class="container logo-strip-inner">
+      <span>Built for meaningful progress</span>
+      <div class="proof-line"><b>Career</b><b>Business</b><b>Education</b><b>Leadership</b><b>Personal Growth</b></div>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="section-kicker">DISCOVER BY GOAL</div>
+      <div class="section-head premium-head"><div><h2>Support for where you are going next.</h2><p>Start with your goal. We will help you find mentors whose experience aligns with what you want to accomplish.</p></div><button class="btn light desktop-only" data-route="directory">Browse all mentors</button></div>
+      <div class="category-grid">
+        <a class="category-card" href="mentor-directory.html"><span class="category-index">01</span><h3>Career Development</h3><p>Career clarity, job search strategy, interviewing, resumes, and professional growth.</p><span class="category-link">Explore mentors →</span></a>
+        <a class="category-card" href="mentor-directory.html"><span class="category-index">02</span><h3>Business & Entrepreneurship</h3><p>Build stronger ideas, sharpen strategy, and learn from people who have done the work.</p><span class="category-link">Explore mentors →</span></a>
+        <a class="category-card" href="mentor-directory.html"><span class="category-index">03</span><h3>Academic Success</h3><p>Planning, study strategy, applications, transitions, and support for educational goals.</p><span class="category-link">Explore mentors →</span></a>
+        <a class="category-card" href="mentor-directory.html"><span class="category-index">04</span><h3>Leadership & Growth</h3><p>Confidence, communication, leadership development, and practical personal growth.</p><span class="category-link">Explore mentors →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft" id="how">
+    <div class="container split-intro">
+      <div><div class="section-kicker">HOW IT WORKS</div><h2>Mentorship without the guesswork.</h2></div>
+      <p>MentEducation makes it easy to discover the right mentor, choose a service, book an available time, and keep everything organized in one place.</p>
+    </div>
+    <div class="container steps-premium">
+      <article><span>01</span><h3>Find your fit</h3><p>Search by mentor, profession, experience, or the goal you are working toward.</p></article>
+      <article><span>02</span><h3>Choose a session</h3><p>Review mentor-created services, pricing, ratings, and real availability before you book.</p></article>
+      <article><span>03</span><h3>Meet one-on-one</h3><p>Connect through your confirmed booking and use secure messaging around your session.</p></article>
+      <article><span>04</span><h3>Keep progressing</h3><p>Manage sessions, credits, reviews, and rebooking from your MentEducation account.</p></article>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="container">
+      <div class="section-head premium-head"><div><div class="section-kicker">FEATURED MENTORS</div><h2>Learn from people with real experience.</h2><p>Explore professionals who bring practical knowledge, perspective, and focused support to every session.</p></div><button class="btn light desktop-only" data-route="directory">View all mentors</button></div>
+      <div class="mentor-grid" id="featuredMentors"></div>
+    </div>
+  </section>
+
+  <section class="section trust-section">
+    <div class="container trust-layout">
+      <div class="trust-copy"><div class="section-kicker light-kicker">TRUST & SAFETY</div><h2>A professional experience from booking to follow-up.</h2><p>MentEducation is designed around clear profiles, secure account access, booking-linked communication, transparent policies, and support when you need it.</p><a class="text-link" href="safety.html">See how MentEducation protects the experience →</a></div>
+      <div class="trust-grid">
+        <div class="trust-feature"><strong>Verified profiles</strong><span>Mentor approval and profile requirements support a more credible marketplace.</span></div>
+        <div class="trust-feature"><strong>Booking-linked messaging</strong><span>Keep conversations connected to the mentorship relationship and session history.</span></div>
+        <div class="trust-feature"><strong>Clear policies</strong><span>Cancellation, credits, no-shows, and payment expectations are explained before issues happen.</span></div>
+        <div class="trust-feature"><strong>Support escalation</strong><span>Reporting and support tools are built into the platform experience.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section final-cta-section">
+    <div class="container final-cta">
+      <div><div class="section-kicker">YOUR NEXT STEP</div><h2>The right conversation can change your direction.</h2><p>Find a mentor who understands the path ahead and book a session when you are ready.</p></div>
+      <div class="final-actions"><button class="btn primary btn-lg" data-route="directory">Find a Mentor</button><button class="btn light btn-lg" data-route="apply">Become a Mentor</button></div>
+    </div>
+  </section>
 </section>
 
-<section class="screen" id="directory"><div class="container directory"><div class="directory-header"><h1>Find Your <span>Mentor</span></h1><p>Browse verified mentors by category, expertise, or goal.</p></div><div class="searchbar"><input class="field" id="mentorSearch" placeholder="Search mentors, skills or specialties..."><select class="field" id="mentorCategory"><option>All Categories</option><option>Career</option><option>Business</option><option>Technology</option><option>Real Estate</option><option>Healthcare</option></select><select class="field"><option>Availability</option><option>This week</option><option>Weekends</option></select><button class="btn primary" id="mentorSearchBtn">Search</button></div><div class="directory-grid"><aside class="filters"><h3>Categories</h3><div class="filter-list" id="categoryFilters"><span data-category="All Categories">All Categories</span><span data-category="Business">Business</span><span data-category="Career">Career</span><span data-category="Technology">Technology</span><span data-category="Real Estate">Real Estate</span><span data-category="Healthcare">Healthcare</span></div></aside><div><p id="mentorCount" class="directory-count"></p><div class="directory-cards" id="directoryMentors"></div><div id="mentorEmpty" class="empty-state hidden">No mentors match that search yet. Try another category or specialty.</div></div></div></div></section>
-
-<section class="screen profile" id="mentorProfile"><div class="profile-wrap"><button class="btn light mobile-only" data-route="directory">← Back</button><div class="profile-grid"><div class="profile-photo"><img id="profileImage" src="" alt=""><button class="btn primary full" style="margin-top:12px" data-route="booking">Book a Session</button></div><div><div class="panel"><h1 id="profileName"></h1><p class="sub" id="profileTitle"></p><div class="stars">★★★★★ <span style="color:#666">4.9 (124 reviews)</span></div><div class="tags" id="profileTags"></div><h3>About Me</h3><p id="profileBio" style="line-height:1.65;color:#565d6d"></p></div><div class="panel"><h3>Sessions offered by this mentor</h3><p class="mentor-control-note">Mentors create their own session offerings, choose session length, and set their own prices. MentEducation does not set mentor rates.</p><div id="profileOffers"></div></div></div></div></div></section>
-
-<section class="screen" id="booking"><div class="booking-wrap"><div class="section-head"><div><h2>Book a Session</h2><p>Choose a mentor-created service and time that works for you.</p></div></div><div class="booking-grid"><div class="panel"><h3>Select a Service</h3><div id="bookingServices"></div></div><div class="panel"><h3>Select Date & Time</h3><b>August 2026</b><div class="calendar"><span class="day">S</span><span class="day">M</span><span class="day">T</span><span class="day">W</span><span class="day">T</span><span class="day">F</span><span class="day">S</span><span class="day">16</span><span class="day active">17</span><span class="day">18</span><span class="day">19</span><span class="day">20</span><span class="day">21</span><span class="day">22</span></div><div class="times"><button class="time">9:00 AM</button><button class="time active">10:30 AM</button><button class="time">1:00 PM</button><button class="time">2:30 PM</button><button class="time">4:00 PM</button><button class="time">5:30 PM</button></div><button class="btn primary full" style="margin-top:18px" id="continueBooking">Review Booking</button></div></div></div></section>
-
-<section class="screen" id="role"><div class="form-wrap"><div class="form-card"><h1>Join MentEducation</h1><p style="color:var(--muted)">Choose how you want to use the platform.</p><div class="form-grid"><button class="panel" data-role="mentee" style="text-align:left"><h3>I'm a Mentee</h3><p>Find mentors, book sessions, and track your progress.</p></button><button class="panel" data-role="mentor" style="text-align:left"><h3>I'm a Mentor</h3><p>Apply, build your profile, and support learners.</p></button></div></div></div></section>
-
-<section class="screen" id="login"><div class="form-wrap"><div class="form-card" style="max-width:560px;margin:auto"><h1>Welcome Back</h1><div class="form-group"><label>Email</label><input class="field" style="width:100%" placeholder="you@example.com"></div><div class="form-group" style="margin-top:14px"><label>Password</label><input class="field" style="width:100%" type="password" placeholder="••••••••"></div><button class="btn primary full" style="margin-top:18px" onclick="location.href='dashboards.html'">Log In Preview</button><p class="auth-note">Authentication/password recovery is being repaired separately before production launch.</p></div></div></section>
-
-<section class="screen" id="apply"><div class="form-wrap"><div class="progress"><div class="prog active"></div><div class="prog"></div><div class="prog"></div><div class="prog"></div></div><div class="form-card"><span class="eyebrow">Become a Mentor</span><h1>Tell us about yourself</h1><p style="color:var(--muted)">This helps us understand your background and expertise.</p><div class="form-grid"><div class="form-group"><label>Full Name</label><input class="field" style="width:100%" placeholder="Enter your full name"></div><div class="form-group"><label>Email Address</label><input class="field" style="width:100%" placeholder="Enter your email"></div><div class="form-group"><label>Where are you based?</label><input class="field" style="width:100%" placeholder="City, State or Country"></div><div class="form-group"><label>Professional Title</label><input class="field" style="width:100%" placeholder="e.g. Career Coach"></div><div class="form-group full"><label>Primary Expertise</label><input class="field" style="width:100%" placeholder="Career, Business, Technology..."></div><div class="form-group full"><label>Why do you want to mentor?</label><textarea class="field" style="width:100%" placeholder="Tell us about your motivation"></textarea></div></div><button class="btn primary" style="margin-top:18px" onclick="location.href='dashboards.html?role=mentor'">Continue to Mentor Preview</button></div></div></section>
-
-<section class="screen" id="menteeDash"><div class="app-shell"><aside class="sidebar"><div class="brand">Ment<span>Education</span></div><a class="side-link active" href="dashboards.html?role=mentee">▣ Dashboard</a><a class="side-link" data-route="directory">⌕ Find Mentors</a><a class="side-link" href="dashboards.html?role=mentee&view=sessions">◫ My Sessions</a><a class="side-link" href="dashboards.html?role=mentee&view=messages">✉ Messages</a><a class="side-link" href="dashboards.html?role=mentee&view=favorites">♡ Favorites</a><a class="side-link" href="wallet/index.html">$ Wallet</a><a class="side-link" href="dashboards.html?role=mentee&view=settings">⚙ Settings</a></aside><div class="dash-main"><div class="dash-head"><div><h1>Welcome back! 👋</h1><p style="color:var(--muted)">Ready to learn and grow today?</p></div></div><div class="metrics"><div class="metric"><span>Upcoming Sessions</span><b>2</b></div><div class="metric"><span>Completed Sessions</span><b>12</b></div><div class="metric"><span>Favorite Mentors</span><b>5</b></div><div class="metric"><span>Messages Unread</span><b>3</b></div></div><div class="content-grid"><div class="panel"><h3>Upcoming Sessions</h3><div class="list-card"><div class="mini-person"><img src="https://i.pravatar.cc/120?img=47"><div><b>Career Planning Session</b><small style="display:block;color:var(--muted)">with Alexis Jordan · Aug 22, 10:30 AM</small></div></div><a class="btn light" href="dashboards.html?role=mentee&view=sessions">Details</a></div></div><div class="panel"><h3>Quick Actions</h3><a class="list-card" href="mentor-directory.html"><span>Find a Mentor</span><span>→</span></a><a class="list-card" href="wallet/index.html"><span>Wallet & Credits</span><span>→</span></a><a class="list-card" href="dashboards.html?role=mentee&view=messages"><span>Messages</span><span>→</span></a></div></div></div></div></section>
-
-<section class="screen" id="mentorDash"><div class="app-shell"><aside class="sidebar"><div class="brand">Ment<span>Education</span></div><a class="side-link active" href="dashboards.html?role=mentor">▣ Dashboard</a><a class="side-link" href="dashboards.html?role=mentor&view=profile">◉ My Profile</a><a class="side-link" href="dashboards.html?role=mentor&view=services">▤ Services & Pricing</a><a class="side-link" href="dashboards.html?role=mentor&view=availability">◫ Availability</a><a class="side-link" href="dashboards.html?role=mentor&view=sessions">▤ My Sessions</a><a class="side-link" href="dashboards.html?role=mentor&view=messages">✉ Messages</a><a class="side-link" href="earnings/index.html">$ Earnings</a></aside><div class="dash-main"><div class="dash-head"><div><h1>Mentor Dashboard</h1><p style="color:var(--muted)">Manage your own sessions, pricing, availability and mentee relationships.</p></div></div><div class="metrics"><div class="metric"><span>Upcoming Sessions</span><b>3</b></div><div class="metric"><span>Active Services</span><b>3</b></div><div class="metric"><span>Rating</span><b>4.9★</b></div><div class="metric"><span>Total Earnings</span><b>$1,125</b></div></div><div class="content-grid"><div class="panel"><h3>Your next session</h3><div class="list-card"><div><b>Career Coaching</b><small style="display:block;color:var(--muted)">Aug 22, 10:30 AM</small></div><a class="btn light" href="dashboards.html?role=mentor&view=sessions">View Details</a></div></div><div class="panel"><h3>Quick Actions</h3><a class="list-card" href="dashboards.html?role=mentor&view=services"><span>Create/Edit Sessions & Pricing</span><span>→</span></a><a class="list-card" href="dashboards.html?role=mentor&view=availability"><span>Manage Availability</span><span>→</span></a><a class="list-card" href="earnings/index.html"><span>View Earnings</span><span>→</span></a></div></div></div></div></section>
-
-<section class="screen" id="ownerDash"><div class="app-shell"><aside class="sidebar"><div class="brand">Ment<span>Education</span> Owner</div><a class="side-link active" href="dashboards.html?role=owner">Overview</a><a class="side-link" href="dashboards.html?role=owner&view=applications">Applications</a><a class="side-link" href="dashboards.html?role=owner&view=mentors">Mentors</a><a class="side-link" href="dashboards.html?role=owner&view=mentees">Mentees</a><a class="side-link" href="dashboards.html?role=owner&view=sessions">Sessions</a><a class="side-link" href="dashboards.html?role=owner&view=reports">Reports</a><a class="side-link" href="owner/payments/index.html">Payments & Credits</a><a class="side-link" href="dashboards.html?role=owner&view=settings">Settings</a></aside><div class="dash-main"><div class="dash-head"><div><h1>Owner Console</h1><p style="color:var(--muted)">Mentor approvals, trust & safety, financial oversight and platform operations.</p></div></div><div class="metrics"><div class="metric"><span>Pending Applications</span><b>8</b></div><div class="metric"><span>Active Mentors</span><b>26</b></div><div class="metric"><span>Total Mentees</span><b>142</b></div><div class="metric"><span>Sessions This Week</span><b>56</b></div></div><div class="content-grid"><div class="panel"><h3>Owner Actions</h3><a class="list-card" href="dashboards.html?role=owner&view=applications"><span>Review Mentor Applications</span><span>→</span></a><a class="list-card" href="dashboards.html?role=owner&view=reports"><span>Reports & Disputes</span><span>→</span></a></div><div class="panel"><h3>Financial Controls</h3><a class="list-card" href="owner/payments/index.html"><span>Payments & Credits</span><span>→</span></a><a class="list-card" href="dashboards.html?role=owner&view=sessions"><span>Platform Sessions</span><span>→</span></a></div></div></div></div></section>
+<section class="screen" id="apply">
+  <div class="application-page">
+    <div class="container application-layout">
+      <div class="application-intro"><div class="section-kicker">BECOME A MENTOR</div><h1>Share what you know. Help someone move forward.</h1><p>Start with a short preliminary screening. If you continue, you will create your account and complete the full mentor application before your profile can be approved.</p><div class="application-points"><span>Set your own session services and pricing</span><span>Manage your own recurring availability</span><span>Build a professional public mentor profile</span></div></div>
+      <div class="form-card mentor-apply-card">
+        <h2>Preliminary mentor screening</h2><p class="form-sub">Tell us a little about your background and why you want to mentor.</p>
+        <div class="form-grid">
+          <div class="form-group"><label>Full Name</label><input class="field" placeholder="Enter your full name"></div>
+          <div class="form-group"><label>Email Address</label><input class="field" type="email" placeholder="you@example.com"></div>
+          <div class="form-group"><label>Location</label><input class="field" placeholder="City, State or Country"></div>
+          <div class="form-group"><label>Professional Title</label><input class="field" placeholder="e.g. Product Manager"></div>
+          <div class="form-group full"><label>Primary Area of Expertise</label><input class="field" placeholder="What field or profession do you mentor in?"></div>
+          <div class="form-group full"><label>Why do you want to mentor?</label><textarea class="field" placeholder="Tell us what you hope to bring to mentees"></textarea></div>
+        </div>
+        <button class="btn primary full btn-lg" style="margin-top:18px">Submit Preliminary Screening</button>
+        <small class="form-fineprint">Submitting this form does not publish a mentor profile or guarantee approval.</small>
+      </div>
+    </div>
+  </div>
+</section>
 </main>
 
-<footer class="footer"><div class="container footer-grid"><div><div class="brand">Ment<span>Education</span></div><p>Empowering connections that inspire growth, learning, and achievement.</p></div><div><h4>Platform</h4><a href="#" data-route="directory">Find Mentors</a><a href="#" data-route="apply">Become a Mentor</a><a href="#how">How It Works</a><a href="pricing.html">Pricing</a></div><div><h4>Support</h4><a href="help.html">Help Center</a><a href="safety.html">Safety & Trust</a><a href="community-guidelines.html">Community Guidelines</a><a href="contact.html">Contact Us</a></div><div><h4>Company</h4><a href="about.html">About Us</a><a href="contact.html">Careers</a><a href="contact.html">Partnerships</a><a href="privacy.html">Privacy Policy</a></div></div></footer>
-<nav class="mobile-bottom" id="bottomNav"><button class="active" data-route="home"><span class="ico">⌂</span>Home</button><button data-route="directory"><span class="ico">⌕</span>Find Mentors</button><button data-route="booking"><span class="ico">◫</span>Sessions</button><button onclick="location.href='dashboards.html?role=mentee&view=messages'"><span class="ico">✉</span>Messages</button><button onclick="location.href='dashboards.html'"><span class="ico">◎</span>Profile</button></nav>
+<footer class="footer">
+  <div class="container footer-top">
+    <div class="footer-brand"><a class="brand" href="#" data-route="home">Ment<span>Education</span></a><p>Professional mentorship for meaningful progress.</p></div>
+    <div><h4>Explore</h4><a href="mentor-directory.html">Find Mentors</a><a href="how-it-works.html">How It Works</a><a href="pricing.html">Pricing</a></div>
+    <div><h4>Mentors</h4><a href="#" data-route="apply">Become a Mentor</a><a href="help.html">Mentor Help</a><a href="community-guidelines.html">Community Guidelines</a></div>
+    <div><h4>Company</h4><a href="about.html">About Us</a><a href="safety.html">Safety & Trust</a><a href="contact.html">Contact</a></div>
+  </div>
+  <div class="container footer-bottom"><span>© 2026 MentEducation. All rights reserved.</span><div><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div></div>
+</footer>
 <script src="app.js"></script>
-</body></html>
+</body>
+</html>
