@@ -24,21 +24,19 @@ module.exports=async function handler(req,res){
     if(summary.status!=='pending'||!summary.hold_expires_at||new Date(summary.hold_expires_at)<=new Date()) return res.status(409).json({error:'This appointment hold has expired.'});
     if(Number(summary.cash_due_cents)<=0) return res.status(400).json({error:'No cash payment is required for this booking.'});
     const origin='https://'+req.headers.host;
+    const successUrl=origin+'/booking-confirmation.html?booking='+encodeURIComponent(bookingId)+'&checkout=success';
 
-    // A declined card can be retried inside the same Stripe Checkout Session.
-    // If the mentee backs out and taps Pay again during the same MentEducation hold,
-    // reopen the existing unpaid session instead of creating duplicate payment windows.
     const existing=await getExistingCheckout(bookingId);
     if(existing&&existing.status==='open'&&existing.payment_status!=='paid'&&existing.url){
       return res.status(200).json({url:existing.url,session_id:existing.id,reused:true});
     }
     if(existing&&existing.status==='complete'&&existing.payment_status==='paid'){
-      return res.status(200).json({url:origin+'/booking-status.html?booking='+encodeURIComponent(bookingId)+'&checkout=success',session_id:existing.id,already_paid:true});
+      return res.status(200).json({url:successUrl,session_id:existing.id,already_paid:true});
     }
 
     const form=new URLSearchParams();
     form.set('mode','payment');
-    form.set('success_url',origin+'/booking-status.html?booking='+encodeURIComponent(bookingId)+'&checkout=success');
+    form.set('success_url',successUrl);
     form.set('cancel_url',origin+'/checkout.html?booking='+encodeURIComponent(bookingId)+'&payment=cancelled');
     form.set('client_reference_id',bookingId);
     form.set('metadata[booking_id]',bookingId);
